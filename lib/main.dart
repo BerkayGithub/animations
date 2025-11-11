@@ -29,8 +29,41 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomePageState extends State<MyHomePage>
+    with SingleTickerProviderStateMixin {
   int _counter = 0;
+  AnimationController? controller;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = AnimationController(
+      vsync: this,
+      duration: Duration(seconds: 1),
+      lowerBound: 0,
+      upperBound: 40,
+    );
+    controller?.addListener(() {
+      setState(() {
+        debugPrint(controller?.value.toString());
+      });
+    });
+    controller?.forward();
+    controller?.addStatusListener((durum){
+      debugPrint(durum.toString());
+      if(durum == AnimationStatus.completed){
+        controller?.reverse().orCancel;
+      }else if(durum == AnimationStatus.dismissed){
+        controller?.forward().orCancel;
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    controller?.dispose();
+    super.dispose();
+  }
 
   void _incrementCounter() {
     setState(() {
@@ -53,12 +86,19 @@ class _MyHomePageState extends State<MyHomePage> {
             const Text('You have pushed the button this many times:'),
             Text(
               '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
+              style: TextStyle(
+                fontSize: controller!.value + 40
+              ),
             ),
             Hero(tag: "berkay", child: FlutterLogo(size: 64)),
-            OutlinedButton(onPressed: (){
-              Navigator.of(context).push(MaterialPageRoute(builder: (context) => NewPage()));
-            }, child: Text("Next Page"))
+            OutlinedButton(
+              onPressed: () {
+                Navigator.of(
+                  context,
+                ).push(MaterialPageRoute(builder: (context) => NewPage()));
+              },
+              child: Text("Next Page"),
+            ),
           ],
         ),
       ),
