@@ -54,7 +54,11 @@ class _MyHomePageState extends State<MyHomePage> {
             Text(
               '$_counter',
               style: Theme.of(context).textTheme.headlineMedium,
-            )
+            ),
+            Hero(tag: "berkay", child: FlutterLogo(size: 64)),
+            OutlinedButton(onPressed: (){
+              Navigator.of(context).push(MaterialPageRoute(builder: (context) => NewPage()));
+            }, child: Text("Next Page"))
           ],
         ),
       ),
