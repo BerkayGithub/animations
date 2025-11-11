@@ -33,21 +33,30 @@ class _MyHomePageState extends State<MyHomePage>
     with SingleTickerProviderStateMixin {
   int _counter = 0;
   AnimationController? controller;
+  //late Animation<double> animation;
+  late Animation animation;
+  late Animation animation2;
 
   @override
   void initState() {
     super.initState();
     controller = AnimationController(
       vsync: this,
-      duration: Duration(seconds: 1),
-      lowerBound: 0,
-      upperBound: 40,
+      duration: Duration(seconds: 3),
+      //lowerBound: 0,
+      //upperBound: 100,
     );
     controller?.addListener(() {
       setState(() {
-        debugPrint(controller?.value.toString());
+        //debugPrint(controller?.value.toString());
+        //debugPrint(animation.value.toString());
       });
     });
+
+    //animation = Tween<double>(begin: 20, end: 150).animate(controller!);
+    animation = ColorTween(begin: Colors.red, end: Colors.yellow).animate(controller!);
+    animation2 = AlignmentTween(begin: Alignment(-1,-1), end: Alignment(1, -1)).animate(controller!);
+
     controller?.forward();
     controller?.addStatusListener((durum){
       debugPrint(durum.toString());
@@ -74,9 +83,9 @@ class _MyHomePageState extends State<MyHomePage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: animation.value,
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-
         title: Text(widget.title),
       ),
       body: Center(
@@ -84,10 +93,13 @@ class _MyHomePageState extends State<MyHomePage>
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             const Text('You have pushed the button this many times:'),
-            Text(
-              '$_counter',
-              style: TextStyle(
-                fontSize: controller!.value + 40
+            Container(
+              alignment: animation2.value,
+              child: Text(
+                '$_counter',
+                style: TextStyle(
+                  fontSize: controller!.value + 20
+                ),
               ),
             ),
             Hero(tag: "berkay", child: FlutterLogo(size: 64)),
