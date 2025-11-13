@@ -1,3 +1,4 @@
+import 'package:animations/animasyonlu_widgetlar.dart';
 import 'package:animations/new_page.dart';
 import 'package:flutter/material.dart';
 
@@ -120,6 +121,14 @@ class _MyHomePageState extends State<MyHomePage>
                 ).push(MaterialPageRoute(builder: (context) => NewPage()));
               },
               child: Text("Next Page"),
+            ),
+            OutlinedButton(
+              onPressed: () {
+                Navigator.of(
+                  context,
+                ).push(MaterialPageRoute(builder: (context) => AnimasyonluWidgetlar()));
+              },
+              child: Text("Animasyonlu Widget Sayfası"),
             ),
           ],
         ),
