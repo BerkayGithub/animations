@@ -33,9 +33,11 @@ class _MyHomePageState extends State<MyHomePage>
     with SingleTickerProviderStateMixin {
   int _counter = 0;
   AnimationController? controller;
+
   //late Animation<double> animation;
   late Animation animation;
   late Animation animation2;
+  late Animation animation3;
 
   @override
   void initState() {
@@ -54,15 +56,22 @@ class _MyHomePageState extends State<MyHomePage>
     });
 
     //animation = Tween<double>(begin: 20, end: 150).animate(controller!);
-    animation = ColorTween(begin: Colors.red, end: Colors.yellow).animate(controller!);
-    animation2 = AlignmentTween(begin: Alignment(-1,-1), end: Alignment(1, -1)).animate(controller!);
+    animation = ColorTween(
+      begin: Colors.red,
+      end: Colors.yellow,
+    ).animate(controller!);
+    animation2 = AlignmentTween(
+      begin: Alignment(-1, -1),
+      end: Alignment(1, -1),
+    ).animate(controller!);
+    animation3 = CurvedAnimation(parent: controller!, curve: Curves.ease);
 
     controller?.forward();
-    controller?.addStatusListener((durum){
+    controller?.addStatusListener((durum) {
       debugPrint(durum.toString());
-      if(durum == AnimationStatus.completed){
+      if (durum == AnimationStatus.completed) {
         controller?.reverse().orCancel;
-      }else if(durum == AnimationStatus.dismissed){
+      } else if (durum == AnimationStatus.dismissed) {
         controller?.forward().orCancel;
       }
     });
@@ -92,14 +101,15 @@ class _MyHomePageState extends State<MyHomePage>
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Text('You have pushed the button this many times:'),
+            Text(
+              'You have pushed the button this many times:',
+              style: TextStyle(fontSize: animation3.value * 36),
+            ),
             Container(
               alignment: animation2.value,
               child: Text(
                 '$_counter',
-                style: TextStyle(
-                  fontSize: controller!.value + 20
-                ),
+                style: TextStyle(fontSize: controller!.value + 20),
               ),
             ),
             Hero(tag: "berkay", child: FlutterLogo(size: 64)),
